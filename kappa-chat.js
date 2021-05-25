@@ -4,7 +4,7 @@ var crypto = require('crypto');
 var hyperswarm = require('hyperswarm')
 var pump = require('pump')
 var list = require('kappa-view-list')
-var memdb = require('memdb');
+var level = require('level-mem');
 var _ = require('lodash');
 
 const topic = crypto.createHash('sha256')
@@ -12,7 +12,7 @@ const topic = crypto.createHash('sha256')
     .digest()
 var swarm = hyperswarm()
 
-var timestampView = list(memdb(), function (msg, next) {
+var timestampView = list(level(), function (msg, next) {
     if (msg.value.timestamp && typeof msg.value.timestamp === 'string') {
         // sort on the 'timestamp' field
         next(null, [msg.value.timestamp])
